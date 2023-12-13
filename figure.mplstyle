@@ -1,0 +1,4 @@
+figure.dpi: 300
+font.size: 8
+figure.constrained_layout.use: True
+lines.linewidth: 1
