@@ -1,2 +1,4 @@
-/data
-/figs
+data/
+figs/
+results/
+*.pyc
