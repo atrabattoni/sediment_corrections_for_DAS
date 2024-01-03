@@ -77,6 +77,10 @@ with ProcessPoolExecutor() as executor:
     )
 res = np.reshape(res, (len(vp), len(vs)))
 
+# save results
+s.to_netcdf("results/s.nc")
+h.to_netcdf("results/h.nc")
+
 # format output
 delta["distance"] = delta["distance"] / 1000
 corr["distance"] = corr["distance"] / 1000

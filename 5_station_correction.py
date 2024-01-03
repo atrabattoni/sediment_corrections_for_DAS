@@ -34,6 +34,9 @@ for n in range(1, niter + 1):
     loss = np.square((delta - corr) / sigma).mean().values
     print(f"Correct - loss: {loss:.3f}")
 
+# save results
+corr.to_netcdf("results/corr.nc")
+
 # format output
 delta["distance"] = delta["distance"] / 1000
 corr["distance"] = corr["distance"] / 1000
