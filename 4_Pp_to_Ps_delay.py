@@ -5,6 +5,7 @@ multipicks = xr.open_dataarray("data/picks.nc")
 multipicks["distance"] = multipicks["distance"] / 1000
 delay = multipicks.sel(phase="Ps") - multipicks.sel(phase="Pp")
 dt = delay.mean("event")
+sig = delay.std("event")
 q1 = delay.quantile(0.25, "event")
 q2 = delay.quantile(0.50, "event")
 q3 = delay.quantile(0.75, "event")
@@ -13,14 +14,14 @@ iqr = q1 - q3
 plt.style.use("figure.mplstyle")
 fig, ax = plt.subplots(figsize=(5.6, 1.6))
 cmap = plt.cm.Purples_r
-ax.fill_between(q2["distance"], q2, q2, color=cmap(0.0), label="Q2", zorder=2)
-ax.fill_between(q2["distance"], q1, q3, color=cmap(0.25), label="Q1/Q3", zorder=1)
+ax.fill_between(q2["distance"], dt, dt, color=cmap(0.0), label=r"$\mu$", zorder=2)
+ax.fill_between(q2["distance"], q1, q3, color=cmap(0.4), label=r"$Q_1/Q_3$", zorder=1)
 ax.fill_between(
-    q2["distance"],
-    q2 - 1.5 * iqr,
-    q2 + 1.5 * iqr,
-    color=cmap(0.5),
-    label="Q2 +/- 1.5 * (Q3 - Q1)",
+    dt["distance"],
+    dt - 2 * sig,
+    dt + 2 * sig,
+    color=cmap(0.7),
+    label="$\mu \pm 2 \sigma$",
     zorder=0,
 )
 ax.set_xlabel("Distance [km]")
@@ -31,3 +32,5 @@ ax.legend(loc="upper center", ncols=3)
 fig.savefig("figs/4_Pp_to_Ps_delay.jpg")
 
 dt.to_netcdf("results/delay.nc")
+
+print(f"The overall standard deviation is {delay.std().values:.2f}")
