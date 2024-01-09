@@ -33,4 +33,5 @@ fig.savefig("figs/4_Pp_to_Ps_delay.jpg")
 
 dt.to_netcdf("results/delay.nc")
 
-print(f"The overall standard deviation is {delay.std().values:.2f}")
+sigma_all = (delay - delay.mean("event")).std()
+print(f"The overall standard deviation is {sigma_all:.2f}")
