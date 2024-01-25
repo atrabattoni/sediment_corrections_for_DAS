@@ -10,7 +10,7 @@ from tqdm import tqdm
 from utils import get_h, get_s, multilocalize, multiresidual, solve_vpvs
 
 # parameters
-niter = 10
+niter = 20
 sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
 vps = 2.0
 vss = 0.5
@@ -38,13 +38,13 @@ for n in range(1, niter + 1):
     delta = multiresidual(ttlut, multipicks, locs)
     loss = np.square((delta - corr) / sigma).mean().values
     print(f"Locate - loss: {loss}")
-    t, vps, vss = solve_vpvs(delta, dt, sigma, vpb, vsb)
+    vps, vss = solve_vpvs(delta, dt, sigma, vpb, vsb)
     h = get_h(dt, vps, vss)
     s = get_s(vps, vss, vpb, vsb)
     corr = h * s
-    loss = np.square((delta - corr - t) / sigma).mean().values
+    loss = ((delta - corr) / sigma).var().values
     print(
-        f"Inverse - loss: {loss:.3f} - Vp: {vps:.3f} - Vs: {vss:.3f} - Vp/Vs: {vps/vss:.3f} - t: {t:.3f}"
+        f"Inverse - loss: {loss:.3f} - Vp: {vps:.3f} - Vs: {vss:.3f} - Vp/Vs: {vps/vss:.3f}"
     )
 
 # result uncertainties
@@ -133,9 +133,9 @@ ax.set_ylim(-2, 2)
 ax = ax.twinx()
 ax.plot(h["distance"], h, color="C4")
 ax.fill_between(h["distance"], h, color="C4", alpha=0.1)
-ax.set_ylim(2, -2)
+ax.set_ylim(3, -3)
 ax.set_ylabel("Thickness [km]", color="C4")
-ax.set_yticks([0, 1, 2])
+ax.set_yticks([0, 1, 2, 3])
 ax.tick_params(axis="y", labelcolor="C4")
 
 legend_elements = [

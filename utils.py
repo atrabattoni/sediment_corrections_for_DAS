@@ -57,14 +57,13 @@ def get_s(vps, vss, vpb, vsb):
 
 def solve_vpvs(delta, dt, sigma, vpb, vsb):
     def fun(x):
-        t = x[0]
-        vps = x[1]
-        vss = x[2]
+        vps = x[0]
+        vss = x[1]
         h = get_h(dt, vps, vss)
         s = get_s(vps, vss, vpb, vsb)
-        return np.square((delta - h * s - t) / sigma).mean().values
+        return ((delta - h * s) / sigma).var().values
 
-    result = minimize(fun, [0.0, 2.0, 0.5])
+    result = minimize(fun, [2.0, 0.5])
     return result.x
 
 

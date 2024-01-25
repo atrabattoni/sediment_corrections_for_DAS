@@ -6,7 +6,7 @@ import xarray as xr
 from utils import correlation, multilocalize, multiresidual
 
 # parameters
-niter = 10
+niter = 20
 sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
 
 # load picks
