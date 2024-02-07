@@ -205,7 +205,7 @@ plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(3.55, 2.6))
 img = ax.pcolormesh(vs, vp, res, vmin=0, vmax=2, shading="nearest", cmap="cet_CET_D2")
-fig.colorbar(img, ax=ax, label="Loss [sigma]")
+fig.colorbar(img, ax=ax, label="Loss")
 ax.contour(vs, vp, res, levels=np.linspace(0, 1, 11), colors="black", linewidths=0.5)
 ax.contour(vs, vp, res, levels=[1], colors="black", linewidths=1)
 ax.plot(vss, vps, "*", mfc="white", mec="black", mew=0.75, ms=7, label="best model")
