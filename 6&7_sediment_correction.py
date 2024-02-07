@@ -146,15 +146,11 @@ ax.legend(handles=legend_elements, loc="lower center", ncols=6, fontsize=7)
 ax.tick_params(labelbottom=False)
 
 ax = axs["b"]
-ax.fill_between(
-    h["distance"], 0, depth.values, color="lightblue", alpha=0.5
-)
+ax.fill_between(h["distance"], 0, depth.values, color="lightblue", alpha=0.5)
 ax.fill_between(
     h["distance"], depth.values, depth.values + h.values, color="beige", alpha=0.5
 )
-ax.fill_between(
-    h["distance"], depth.values + h.values, 3.0, color="gray", alpha=0.3
-)
+ax.fill_between(h["distance"], depth.values + h.values, 3.0, color="gray", alpha=0.3)
 ax.axhline(0, color="black", lw=0.75)
 ax.plot(h["distance"], depth.values, color="black", lw=0.75)
 ax.plot(h["distance"], depth.values + h.values, color="black", lw=0.75)

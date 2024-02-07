@@ -1,13 +1,11 @@
 import cmocean
-import matplotlib.cm as mcm
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import numpy as np
-import xarray as xr
-
 import pandas as pd
-import matplotlib.pyplot as plt
+import xarray as xr
+from matplotlib.offsetbox import AnchoredText
 
 dataset = xr.open_dataset("data/topo.grd")
 fiber = xr.open_dataset("data/fiber.nc")
@@ -107,10 +105,6 @@ for event in multiloc.index.get_level_values(0).unique():
             marker=marker,
             s=s,
             color=color,
-            # c=[loc["latitude"]],
-            # cmap="magma_r",
-            # vmin=-32.9,
-            # vmax=-31.5,
             zorder=3,
         )
 for marker, s, color, label in zip(markers, sizes, colors, labels):
@@ -119,5 +113,17 @@ ax.set_xlim(-72.3, -71.1)
 ax.set_ylim(65, -5)
 ax.set_ylabel("Depth [km]")
 ax.legend(title="Correction:")
+
+for ax, label in zip(axes, ["a", "b"]):
+    ax.add_artist(
+        AnchoredText(
+            f"({label})",
+            loc="upper left",
+            frameon=False,
+            prop=dict(color="black", weight="bold"),
+            pad=0.0,
+            borderpad=0.2,
+        )
+    )
 
 fig.savefig("figs/9_catalog.pdf", bbox_inches="tight")

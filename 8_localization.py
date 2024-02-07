@@ -1,10 +1,10 @@
 # % Computation
 import colorcet
-from matplotlib.offsetbox import AnchoredText
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import xarray as xr
+from matplotlib.offsetbox import AnchoredText
 from matplotlib.ticker import MultipleLocator
 from pyproj import Geod
 from xloc import localize
@@ -88,7 +88,7 @@ for event in multipicks["event"].values:
             toa[phase].plot(ax=ax, yincrease=False, color="black", lw=2)
 
         for phase in picks:
-            picks[phase].plot(ax=ax, yincrease=False, color="C3", lw=4/3)
+            picks[phase].plot(ax=ax, yincrease=False, color="C3", lw=4 / 3)
 
         ax.set_title(title[kind], fontweight="bold")
         ax.set_xlabel("Distance [km]")
@@ -106,7 +106,7 @@ for event in multipicks["event"].values:
     ax.legend(loc="lower right")
 
     ax = axs[0, -2]
-    ax.plot([], [],  color="C3", lw=4/3, label="picks")
+    ax.plot([], [], color="C3", lw=4 / 3, label="picks")
     ax.legend(loc="lower right")
 
     for ax, kind in zip(axs[1], res):
