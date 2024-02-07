@@ -17,6 +17,9 @@ vss = 0.5
 vpb = 4.9
 vsb = 2.8
 
+# load fiber
+fiber = xr.open_dataset("data/fiber.nc")
+
 # load picks
 multipicks = xr.open_dataarray("data/picks.nc")
 
@@ -81,10 +84,13 @@ res = np.reshape(res, (len(vp), len(vs)))
 s.to_netcdf("results/s.nc")
 h.to_netcdf("results/h.nc")
 
+depth = fiber["depth"].interp(distance=h["distance"])
+
 # format output
 delta["distance"] = delta["distance"] / 1000
 corr["distance"] = corr["distance"] / 1000
 h["distance"] = h["distance"] / 1000
+depth = depth / 1000
 
 delta = delta.to_dataset("phase")
 corr = corr.to_dataset("phase")
@@ -102,8 +108,8 @@ from matplotlib.ticker import MultipleLocator
 plt.style.use("figure.mplstyle")
 
 fig, axs = plt.subplot_mosaic(
-    [["a", "a"], ["b", "c"]],
-    figsize=(5.6, 3.2),
+    [["a", "a"], ["b", "b"], ["c", "d"]],
+    figsize=(5.6, 4.8),
 )
 
 ax = axs["a"]
@@ -125,30 +131,41 @@ for phase, cmap in zip(delta, cmaps):
     )
     ax.plot(mu["distance"], mu, color=color, ls="--")
     ax.plot(corr["distance"], corr[phase], color=color)
-ax.set_xlabel("Distance [km]")
-ax.set_ylabel("Residual [s]")
+ax.set_ylabel("Correction [s]")
 ax.set_xlim(20, 120)
-ax.set_ylim(-2, 2)
-
-ax = ax.twinx()
-ax.plot(h["distance"], h, color="C4")
-ax.fill_between(h["distance"], h, color="C4", alpha=0.1)
-ax.set_ylim(3, -3)
-ax.set_ylabel("Thickness [km]", color="C4")
-ax.set_yticks([0, 1, 2, 3])
-ax.tick_params(axis="y", labelcolor="C4")
-
+ax.set_ylim(-1, 2)
 legend_elements = [
     Line2D([], [], color=cmaps[0](0.0), label="Pp"),
     Line2D([], [], color=cmaps[1](0.0), label="Ps"),
     Line2D([], [], color=cmaps[2](0.0), label="Ss"),
-    Line2D([], [], color="black", label="Cor"),
-    Line2D([], [], color="black", linestyle="--", label="Res"),
-    Patch(facecolor="gray", edgecolor="none", label="Err", alpha=0.5),
+    Line2D([], [], color="black", label="Applied"),
+    Line2D([], [], color="black", linestyle="--", label="Required"),
+    Patch(facecolor="gray", edgecolor="none", label="Q1/Q3", alpha=0.5),
 ]
 ax.legend(handles=legend_elements, loc="lower center", ncols=6, fontsize=7)
+ax.tick_params(labelbottom=False)
 
-for label, phase in [("b", "Ps"), ("c", "Ss")]:
+ax = axs["b"]
+ax.fill_between(
+    h["distance"], 0, depth.values, color="lightblue", alpha=0.5
+)
+ax.fill_between(
+    h["distance"], depth.values, depth.values + h.values, color="beige", alpha=0.5
+)
+ax.fill_between(
+    h["distance"], depth.values + h.values, 3.0, color="gray", alpha=0.3
+)
+ax.axhline(0, color="black", lw=0.75)
+ax.plot(h["distance"], depth.values, color="black", lw=0.75)
+ax.plot(h["distance"], depth.values + h.values, color="black", lw=0.75)
+ax.set_ylim(3, -1)
+ax.set_ylabel("Depth [km]")
+ax.set_yticks([0, 1, 2, 3])
+ax.set_xlim(20, 120)
+ax.set_xlabel("Distance [km]")
+
+
+for label, phase in [("c", "Ps"), ("d", "Ss")]:
     ax = axs[label]
     sct = ax.scatter(
         x=delta["Pp"].mean("event").values,
@@ -163,17 +180,17 @@ for label, phase in [("b", "Ps"), ("c", "Ss")]:
     r = s[phase] / s["Pp"]
     ax.plot(corr["Pp"], corr[phase], "k", label=f"y={r:.2f}*x")
     ax.legend(loc="lower right", fontsize=7)
-    ax.set_xlabel("Pp residuals [s]")
-    ax.set_ylabel(f"{phase} residuals [s]")
+    ax.set_xlabel("Pp req. corr. [s]")
+    ax.set_ylabel(f"{phase} req. corr. [s]")
     ax.set_xlim(0.0, 0.75)
     ax.set_ylim(0, 2.0)
     ax.xaxis.set_major_locator(MultipleLocator(0.25))
     ax.yaxis.set_major_locator(MultipleLocator(0.50))
 
-cax = axs["c"].inset_axes([1.05, 0.0, 0.05, 1.0])
+cax = axs["d"].inset_axes([1.05, 0.0, 0.05, 1.0])
 fig.colorbar(sct, cax=cax, label="Distance [km]")
 cax.yaxis.set_major_locator(MultipleLocator(20))
-for label in ["a", "b", "c"]:
+for label in ["a", "b", "c", "d"]:
     axs[label].add_artist(
         AnchoredText(
             f"({label})",
@@ -185,7 +202,7 @@ for label in ["a", "b", "c"]:
         )
     )
 
-fig.savefig(f"figs/6_sediment_correction.jpg")
+fig.savefig(f"figs/6_sediment_correction.pdf")
 plt.close(fig)
 
 # %% Figure
@@ -201,5 +218,5 @@ ax.set_ylim(0, 4)
 ax.set_xlabel("Vs [km/s]")
 ax.set_ylabel("Vp [km/s]")
 ax.legend()
-fig.savefig("figs/7_vp_vs_inversion.png")
+fig.savefig("figs/7_vp_vs_inversion.pdf")
 plt.close(fig)
