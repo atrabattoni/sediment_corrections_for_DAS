@@ -151,5 +151,5 @@ axins.add_artist(
     )
 )
 
-fig.savefig(f"figs/2_signal_and_picks.jpg")
+fig.savefig(f"figs/2_signal_and_picks.pdf")
 plt.close(fig)

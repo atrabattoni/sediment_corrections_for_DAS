@@ -149,5 +149,5 @@ ax.add_artist(
     )
 )
 
-fig.savefig("figs/1_map.jpg")
+fig.savefig("figs/1_map.pdf")
 plt.close(fig)

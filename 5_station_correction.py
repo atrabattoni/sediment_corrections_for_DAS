@@ -77,7 +77,7 @@ for phase, cmap in zip(delta, cmaps):
     )
     ax.plot(mu["distance"], mu, color=cmap(0.0), label=phase)
 ax.set_xlabel("Distance [km]")
-ax.set_ylabel("Residual [s]")
+ax.set_ylabel("Correction [s]")
 ax.set_xlim(20, 120)
 ax.set_ylim(-2, 2)
 ax.legend(loc="lower center", fontsize=7, ncols=3)
@@ -109,8 +109,8 @@ for label, phase in [("b", "Ps"), ("c", "Ss")]:
         label=f"y={r:.2f}*x+{t0:.2f}",
     )
     ax.legend(loc="lower right", fontsize=7)
-    ax.set_xlabel("Pp residuals [s]")
-    ax.set_ylabel(f"{phase} residuals [s]")
+    ax.set_xlabel("Pp Correction [s]")
+    ax.set_ylabel(f"{phase} Correction [s]")
     ax.set_xlim(-0.5, 0.25)
     ax.set_ylim(-0.5, 1.5)
     ax.xaxis.set_major_locator(MultipleLocator(0.25))
@@ -131,5 +131,5 @@ for label in ["a", "b", "c"]:
         )
     )
 
-fig.savefig(f"figs/5_station_correction.jpg")
+fig.savefig(f"figs/5_station_correction.pdf")
 plt.close(fig)
