@@ -150,13 +150,13 @@ ax.fill_between(h["distance"], 0, depth.values, color="lightblue", alpha=0.5)
 ax.fill_between(
     h["distance"], depth.values, depth.values + h.values, color="beige", alpha=0.5
 )
-ax.fill_between(h["distance"], depth.values + h.values, 3.0, color="gray", alpha=0.3)
+ax.fill_between(h["distance"], depth.values + h.values, 4.0, color="gray", alpha=0.3)
 ax.axhline(0, color="black", lw=0.75)
 ax.plot(h["distance"], depth.values, color="black", lw=0.75)
 ax.plot(h["distance"], depth.values + h.values, color="black", lw=0.75)
-ax.set_ylim(3, -1)
+ax.set_ylim(4, -1)
 ax.set_ylabel("Depth [km]")
-ax.set_yticks([0, 1, 2, 3])
+ax.set_yticks([0, 1, 2, 3, 4])
 ax.set_xlim(20, 120)
 ax.set_xlabel("Distance [km]")
 
@@ -204,7 +204,9 @@ plt.close(fig)
 # %% Figure
 
 fig, ax = plt.subplots(figsize=(3.55, 2.6))
-img = ax.pcolormesh(vs, vp, res, vmin=0, vmax=2, shading="nearest", cmap="cet_CET_D2")
+img = ax.pcolormesh(
+    vs, vp, res, vmin=0, vmax=2, shading="nearest", cmap="cet_CET_D2", rasterized=True
+)
 fig.colorbar(img, ax=ax, label="Loss")
 ax.contour(vs, vp, res, levels=np.linspace(0, 1, 11), colors="black", linewidths=0.5)
 ax.contour(vs, vp, res, levels=[1], colors="black", linewidths=1)

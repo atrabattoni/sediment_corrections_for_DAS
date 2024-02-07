@@ -79,7 +79,7 @@ for phase, cmap in zip(delta, cmaps):
 ax.set_xlabel("Distance [km]")
 ax.set_ylabel("Correction [s]")
 ax.set_xlim(20, 120)
-ax.set_ylim(-2, 2)
+ax.set_ylim(-1, 2)
 ax.legend(loc="lower center", fontsize=7, ncols=3)
 
 

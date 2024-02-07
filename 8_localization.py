@@ -151,10 +151,10 @@ for event in multipicks["event"].values:
         )
         ax.grid(which="both", color="w", linewidth=0.5, alpha=0.25)
     ax = axs[1, 0]
-    ax.xaxis.set_major_locator(MultipleLocator(1.0))
-    ax.xaxis.set_minor_locator(MultipleLocator(0.2))
-    ax.yaxis.set_major_locator(MultipleLocator(1.0))
-    ax.yaxis.set_minor_locator(MultipleLocator(0.2))
+    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+    ax.yaxis.set_major_locator(MultipleLocator(0.5))
+    ax.yaxis.set_minor_locator(MultipleLocator(0.1))
     ax.xaxis.set_major_formatter(lambda x, _: "")
     ax.yaxis.set_major_formatter(lambda x, _: f"{x}°")
     ax.set_ylabel("Latitude")
@@ -205,9 +205,9 @@ for event in multipicks["event"].values:
         ax.set_xlabel("Longitude")
         ax.grid(which="both", color="w", linewidth=0.5, alpha=0.25)
     ax = axs[2, 0]
-    ax.xaxis.set_major_locator(MultipleLocator(1.0))
-    ax.xaxis.set_minor_locator(MultipleLocator(0.2))
-    ax.yaxis.set_major_locator(MultipleLocator(20_000.0))
+    ax.xaxis.set_major_locator(MultipleLocator(0.5))
+    ax.xaxis.set_minor_locator(MultipleLocator(0.1))
+    ax.yaxis.set_major_locator(MultipleLocator(10_000.0))
     ax.xaxis.set_major_formatter(lambda x, _: f"{x}°")
     ax.yaxis.set_major_formatter(lambda x, _: f"{x/1000:g}")
     ax.set_ylabel("Depth [km]")
@@ -237,7 +237,7 @@ for event in multipicks["event"].values:
         orientation="horizontal",
         label="Loss",
         pad=0.2,
-        fraction=0.15,
+        fraction=0.125,
         aspect=30,
     )
     fig.align_ylabels(axs)
