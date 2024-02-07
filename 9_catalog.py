@@ -120,4 +120,4 @@ ax.set_ylim(65, -5)
 ax.set_ylabel("Depth [km]")
 ax.legend(title="Correction:")
 
-fig.savefig("figs/S1_loc_map.jpg")
+fig.savefig("figs/9_catalog.pdf", bbox_inches="tight")
