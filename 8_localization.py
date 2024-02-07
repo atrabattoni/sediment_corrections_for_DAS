@@ -42,6 +42,9 @@ ttlut = xr.open_dataarray("/ssd/trabatto/sediment_correction/paper.nc")
 
 
 for event in multipicks["event"].values:
+    if not event == "2021-11-10T01:16:50":  # remove those lines to process all events
+        continue
+
     picks = (
         multipicks.sel(event=event, drop=True)
         .to_dataset("phase")
@@ -59,7 +62,7 @@ for event in multipicks["event"].values:
         sharex="row",
         sharey="row",
         figsize=(7.5, 6.0),
-        gridspec_kw=dict(height_ratios=[2, 3, 1]),
+        gridspec_kw=dict(height_ratios=[2, 2.5, 1.3]),
     )
 
     title = {
@@ -82,10 +85,10 @@ for event in multipicks["event"].values:
         toa -= tref
 
         for phase in toa:
-            toa[phase].plot(ax=ax, yincrease=False, color="dimgrey")
+            toa[phase].plot(ax=ax, yincrease=False, color="black", lw=2)
 
         for phase in picks:
-            picks[phase].plot(ax=ax, yincrease=False, color=colorcet.cm.CET_D2(1.0))
+            picks[phase].plot(ax=ax, yincrease=False, color="C3", lw=4/3)
 
         ax.set_title(title[kind], fontweight="bold")
         ax.set_xlabel("Distance [km]")
@@ -99,11 +102,11 @@ for event in multipicks["event"].values:
     ax.set_ylim(15, -1)
 
     ax = axs[0, -1]
-    ax.plot([], [], color="dimgrey", label="model")
+    ax.plot([], [], color="black", lw=2, label="model")
     ax.legend(loc="lower right")
 
     ax = axs[0, -2]
-    ax.plot([], [], color=colorcet.cm.CET_D2(1.0), label="picks")
+    ax.plot([], [],  color="C3", lw=4/3, label="picks")
     ax.legend(loc="lower right")
 
     for ax, kind in zip(axs[1], res):
@@ -216,11 +219,16 @@ for event in multipicks["event"].values:
                 f"({label})",
                 loc="upper left",
                 frameon=False,
-                prop=dict(color= "black" if label in "abcd" else "white", weight="bold"),
+                prop=dict(color="black" if label in "abcd" else "white", weight="bold"),
                 pad=0.0,
                 borderpad=0.2,
             )
         )
+
+    axs[1, 0].set_xlim(-72.3, -71.1)
+    axs[1, 0].set_ylim(-32.9, -31.5)
+    axs[2, 0].set_xlim(-72.3, -71.1)
+    axs[2, 0].set_ylim(65000, -5000)
 
     fig.colorbar(
         img,
@@ -233,5 +241,6 @@ for event in multipicks["event"].values:
         aspect=30,
     )
     fig.align_ylabels(axs)
-    fig.savefig(f"figs/tmp2/{event}.jpg")
-    plt.show()
+    # fig.savefig(f"figs/tmp/{event}.pdf")  # use this line if processing all events
+    fig.savefig(f"figs/8_localization.pdf")
+    plt.close(fig)
