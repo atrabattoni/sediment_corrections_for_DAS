@@ -16,7 +16,7 @@ plt.style.use("figure.mplstyle")
 fig, axes = plt.subplots(
     nrows=2,
     sharex=True,
-    figsize=(5.4, 7.15),
+    figsize=(4.8, 7.15),
     layout="constrained",
     gridspec_kw=dict(height_ratios=[3, 1]),
 )
@@ -32,6 +32,8 @@ divnorm = mcolors.TwoSlopeNorm(vmin=-6.0, vcenter=0, vmax=6)
 ls = mcolors.LightSource(azdeg=45)
 data = dataset["z"].data.reshape(dataset["dimension"].values, order="F")[:, ::-1].T
 data = data / 1000
+profile_dep = -np.nanmean(data, axis=0)
+profile_lon = np.linspace(*dataset["x_range"].values, len(profile_dep))
 d = 2 * np.pi * 6371 / 360 * dataset["spacing"][1].values
 data = ls.shade(data, cmap=terrain_map, blend_mode="overlay", dx=d, dy=d, norm=divnorm)
 extent = np.concatenate((dataset["x_range"].values, dataset["y_range"].values))
@@ -56,26 +58,22 @@ colors = ["#d72828", "#9457b0", "#5e6abb", "#1e75b3"]
 for event in multiloc.index.get_level_values(0).unique():
     locs = multiloc.loc[event]
     ax.plot(locs["longitude"], locs["latitude"], c="black", lw=0.5)
-    for corr, marker, s in zip(
-        multiloc.index.get_level_values(1).unique(), markers, sizes
+    for corr, marker, s, color, in zip(
+        multiloc.index.get_level_values(1).unique(), markers, sizes, colors
     ):
         loc = locs.loc[corr]
         sc = ax.scatter(
             [loc["longitude"]],
             [loc["latitude"]],
-            c=[loc["depth"]],
+            color=color,
             ec="black",
             marker=marker,
             s=s,
-            cmap="magma_r",
-            vmin=-5,
-            vmax=65,
             zorder=3,
         )
-for marker, s, label in zip(markers, sizes, labels):
-    ax.scatter([], [], c="white", ec="black", marker=marker, s=s, label=label)
+for marker, s, color, label in zip(markers, sizes, colors, labels):
+    ax.scatter([], [], c=color, ec="black", marker=marker, s=s, label=label)
 
-fig.colorbar(sc, ax=ax, label="Depth [km]", aspect=30, pad=0.03, shrink=0.6)
 ax.legend(title="Correction:")
 ax.set_aspect("equal", "box")
 ax.xaxis.set_major_locator(mticker.MultipleLocator(0.5))
@@ -89,6 +87,13 @@ ax.set_ylim(-32.9, -31.5)
 
 # profile
 ax = axes[1]
+
+moho = pd.read_csv("data/moho.csv")
+slab = pd.read_csv("data/slab.csv")
+ax.plot(moho["longitude"], moho["smoothed_depth"], color="gray", lw=2)
+ax.plot(slab["longitude"], slab["smoothed_depth"], color="gray", lw=2)
+ax.plot(profile_lon, profile_dep, color="gray", lw=2)
+
 for event in multiloc.index.get_level_values(0).unique():
     locs = multiloc.loc[event]
     ax.plot(locs["longitude"], locs["depth"], c="black", lw=0.5)
@@ -112,7 +117,6 @@ for marker, s, color, label in zip(markers, sizes, colors, labels):
 ax.set_xlim(-72.3, -71.1)
 ax.set_ylim(65, -5)
 ax.set_ylabel("Depth [km]")
-ax.legend(title="Correction:")
 
 for ax, label in zip(axes, ["a", "b"]):
     ax.add_artist(
@@ -126,4 +130,6 @@ for ax, label in zip(axes, ["a", "b"]):
         )
     )
 
+
 fig.savefig("figs/9_catalog.pdf", bbox_inches="tight")
+plt.close(fig)
