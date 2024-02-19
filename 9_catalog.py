@@ -38,6 +38,8 @@ d = 2 * np.pi * 6371 / 360 * dataset["spacing"][1].values
 data = ls.shade(data, cmap=terrain_map, blend_mode="overlay", dx=d, dy=d, norm=divnorm)
 extent = np.concatenate((dataset["x_range"].values, dataset["y_range"].values))
 
+data[:, :, 3] = 0.5
+
 ax.imshow(data, aspect="auto", origin="lower", extent=extent)
 
 ax.plot(fiber["longitude"], fiber["latitude"], color="black", lw=2, ls="--")
@@ -53,7 +55,7 @@ ax.plot(
 markers = ["o", "s", "H", "D"]
 sizes = [23, 20, 26, 17]
 labels = ["none", "delay", "station", "sediment"]
-colors = ["#d72828", "#9457b0", "#5e6abb", "#1e75b3"]
+colors = ["#ff0000", "#66497d", "#3362a7", "#007ad1"]
 
 for event in multiloc.index.get_level_values(0).unique():
     locs = multiloc.loc[event]
@@ -69,6 +71,7 @@ for event in multiloc.index.get_level_values(0).unique():
             ec="black",
             marker=marker,
             s=s,
+            linewidth=0.5,
             zorder=3,
         )
 for marker, s, color, label in zip(markers, sizes, colors, labels):
@@ -110,6 +113,7 @@ for event in multiloc.index.get_level_values(0).unique():
             marker=marker,
             s=s,
             color=color,
+            linewidth=0.5,
             zorder=3,
         )
 for marker, s, color, label in zip(markers, sizes, colors, labels):

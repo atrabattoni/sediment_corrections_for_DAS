@@ -88,7 +88,7 @@ for event in multipicks["event"].values:
             toa[phase].plot(ax=ax, yincrease=False, color="black", lw=2)
 
         for phase in picks:
-            picks[phase].plot(ax=ax, yincrease=False, color="C3", lw=4 / 3)
+            picks[phase].plot(ax=ax, yincrease=False, color="C3", lw=1)
 
         ax.set_title(title[kind], fontweight="bold")
         ax.set_xlabel("Distance [km]")
