@@ -13,7 +13,7 @@ sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
 multipicks = xr.open_dataarray("data/picks.nc")
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_correction/ttlut_das_geo.nc").load()
+ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc").load()
 
 # compute delay
 dt = (multipicks.sel(phase="Ps") - multipicks.sel(phase="Pp")).mean("event")

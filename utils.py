@@ -64,7 +64,7 @@ def solve_vpvs(delta, dt, sigma, vpb, vsb):
         return ((delta - h * s) / sigma).var().values
 
     result = minimize(fun, [2.0, 0.5])
-    return result.x
+    return np.abs(result.x)
 
 
 def correlation(x, y, sx, sy):

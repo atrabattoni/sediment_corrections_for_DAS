@@ -2,7 +2,7 @@ import pandas as pd
 import xarray as xr
 from xloc.ttlut import get_grid, get_model, get_ttlut
 
-resolution = 1_000.0
+resolution = 3_000.0
 
 model = pd.read_csv("data/marot2014.csv", index_col="depth", dtype="float").to_xarray()
 receivers = xr.open_dataset("data/fiber.nc")
@@ -38,4 +38,4 @@ ttlut = (
     .swap_dims({"distance": "station"})
     .transpose("station", "phase", "longitude", "latitude", "depth")
 )
-ttlut.to_netcdf("/ssd/trabatto/sediment_correction/paper.nc")
+ttlut.to_netcdf("/ssd/trabatto/sediment_corrections/ttlut.nc")
