@@ -4,9 +4,9 @@ from collections import defaultdict
 import pandas as pd
 import xarray as xr
 from tqdm import tqdm
-from xloc import localize
 
 from utils import to_dataframe
+from xloc import localize
 
 # parameters
 sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})

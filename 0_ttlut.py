@@ -1,5 +1,6 @@
 import pandas as pd
 import xarray as xr
+
 from xloc.ttlut import get_grid, get_model, get_ttlut
 
 resolution = 1_000.0

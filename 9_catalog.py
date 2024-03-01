@@ -60,9 +60,12 @@ colors = ["#ff0000", "#66497d", "#3362a7", "#007ad1"]
 for event in multiloc.index.get_level_values(0).unique():
     locs = multiloc.loc[event]
     ax.plot(locs["longitude"], locs["latitude"], c="black", lw=0.5)
-    for corr, marker, s, color, in zip(
-        multiloc.index.get_level_values(1).unique(), markers, sizes, colors
-    ):
+    for (
+        corr,
+        marker,
+        s,
+        color,
+    ) in zip(multiloc.index.get_level_values(1).unique(), markers, sizes, colors):
         loc = locs.loc[corr]
         sc = ax.scatter(
             [loc["longitude"]],
