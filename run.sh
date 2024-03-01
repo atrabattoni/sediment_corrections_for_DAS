@@ -1,6 +1,13 @@
+#!/bin/bash
+
 # First, install dependencies (optional)
 echo "Installing dependencies..."
 pip install -r requirements.txt
+
+# Create output directories
+echo "Create results and figs directories"
+mkdir -p results
+mkdir -p figs
 
 # Run Python scripts
 echo "Running Python scripts..."
