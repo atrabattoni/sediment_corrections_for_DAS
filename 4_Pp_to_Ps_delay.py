@@ -30,6 +30,7 @@ ax.set_xlim(20, 120)
 ax.set_ylim(0, 2)
 ax.legend(loc="upper center", ncols=3)
 fig.savefig("figs/4_Pp_to_Ps_delay.pdf")
+fig.savefig("figs/4_Pp_to_Ps_delay.jpg")
 
 dt.to_netcdf("results/delay.nc")
 

@@ -136,4 +136,5 @@ for ax, label in zip(axes, ["a", "b"]):
 
 
 fig.savefig("figs/9_catalog.pdf", bbox_inches="tight")
+fig.savefig("figs/9_catalog.jpg", bbox_inches="tight")
 plt.close(fig)

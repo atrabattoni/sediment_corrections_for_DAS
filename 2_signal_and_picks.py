@@ -1,9 +1,6 @@
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
 import numpy as np
-import pandas as pd
-import scipy.signal as sp
 import xarray as xr
 import xdas
 import xdas.signal as xp
@@ -152,4 +149,5 @@ axins.add_artist(
 )
 
 fig.savefig(f"figs/2_signal_and_picks.pdf")
+fig.savefig(f"figs/2_signal_and_picks.jpg")
 plt.close(fig)

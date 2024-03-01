@@ -132,4 +132,5 @@ for label in ["a", "b", "c"]:
     )
 
 fig.savefig(f"figs/5_station_correction.pdf")
+fig.savefig(f"figs/5_station_correction.jpg")
 plt.close(fig)

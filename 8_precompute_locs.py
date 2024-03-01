@@ -28,17 +28,18 @@ correction["hs"] = h * s
 multipicks = xr.open_dataarray("data/picks.nc")
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_correction/paper.nc").load()
+ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc").load()
 
 multiloc = []
 multires = defaultdict(xr.Dataset)
 for event in tqdm(multipicks["event"].values):
     ress = xr.Dataset()
-    picks = multipicks.sel(event=event, drop=True)
     for kind in correction:
-        loc, res = localize(
-            ttlut, to_dataframe(picks - correction[kind], sigma), normalize=False
-        )
+        picks = multipicks.sel(event=event, drop=True)
+        if kind == "no":
+            picks = picks.sel(phase=["Pp", "Ss"])
+        picks = to_dataframe(picks - correction[kind], sigma)
+        loc, res = localize(ttlut, picks, normalize=False)
         record = {"event": event, "correction": kind} | {
             key: loc[key].values.item() for key in (list(loc.coords) + list(loc))
         }

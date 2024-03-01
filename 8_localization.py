@@ -1,15 +1,10 @@
 # % Computation
 import colorcet
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import xarray as xr
 from matplotlib.offsetbox import AnchoredText
 from matplotlib.ticker import MultipleLocator
-from pyproj import Geod
-from xloc import localize
-
-from utils import to_dataframe
 
 # parameters
 sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
@@ -38,7 +33,7 @@ correction["hs"] = h * s
 fiber = xr.open_dataset("data/fiber.nc").sel(distance=slice(20_000, 120_000))
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_correction/paper.nc")
+ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc")
 
 
 for event in multipicks["event"].values:
@@ -243,4 +238,5 @@ for event in multipicks["event"].values:
     fig.align_ylabels(axs)
     # fig.savefig(f"figs/tmp/{event}.pdf")  # use this line if processing all events
     fig.savefig(f"figs/8_localization.pdf")
+    fig.savefig(f"figs/8_localization.jpg")
     plt.close(fig)
