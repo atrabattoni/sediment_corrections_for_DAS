@@ -20,7 +20,7 @@ signal = xp.integrate(signal, dim="distance")
 signal = xp.decimate(signal, 16, ftype="fir", zero_phase=True, dim="distance")
 signal = xp.integrate(signal, dim="time")
 signal = xp.decimate(signal, 2, ftype="iir", zero_phase=False, dim="time")
-signal = xp.iirfilter(signal, 5.0, "highpass", dim="time")
+signal = xp.filter(signal, 5.0, "highpass", dim="time")
 signal = xp.sliding_mean_removal(signal, 1000.0, dim="distance")
 signal *= 1.08e-7
 

@@ -53,11 +53,11 @@ for event in multipicks["event"].values:
     plt.style.use("figure.mplstyle")
     fig, axs = plt.subplots(
         ncols=4,
-        nrows=3,
+        nrows=4,
         sharex="row",
         sharey="row",
-        figsize=(7.5, 6.0),
-        gridspec_kw=dict(height_ratios=[2, 2.5, 1.3]),
+        figsize=(7.5, 7.0),
+        gridspec_kw=dict(height_ratios=[2, 1.25, 2.5, 1.3]),
     )
 
     title = {
@@ -67,7 +67,7 @@ for event in multipicks["event"].values:
         "hs": "Sediment Correction",
     }
 
-    for ax, kind in zip(axs[0], correction):
+    for ax_up, ax_down, kind in zip(axs[0], axs[1], correction):
         t0 = multiloc.loc[event, kind]["time"]
         coords = dict(multiloc.loc[event, kind][["longitude", "latitude", "depth"]])
         tt = ttlut.sel(coords, method="nearest", drop=True).astype("float64")
@@ -80,14 +80,24 @@ for event in multipicks["event"].values:
         toa -= tref
 
         for phase in toa:
-            toa[phase].plot(ax=ax, yincrease=False, color="black", lw=2)
+            toa[phase].plot(ax=ax_up, yincrease=False, color="black", lw=2)
 
         for phase in picks:
-            picks[phase].plot(ax=ax, yincrease=False, color="C3", lw=1)
+            picks[phase].plot(ax=ax_up, yincrease=False, color="C3", lw=1)
 
-        ax.set_title(title[kind], fontweight="bold")
-        ax.set_xlabel("Distance [km]")
-        ax.set_ylabel("")
+        for idx, phase in enumerate(picks):
+            (picks[phase] - toa[phase]).plot(
+                ax=ax_down, yincrease=False, lw=4 / 3, zorder=5 - idx
+            )
+        ax_down.axhline(0, color="black")
+
+        ax_up.set_title(title[kind], fontweight="bold")
+        ax_up.set_ylabel("")
+        ax_up.set_xlabel("")
+        ax_up.tick_params(labelbottom=False)
+
+        ax_down.set_xlabel("Distance [km]")
+        ax_down.set_ylabel("")
 
     ax = axs[0, 0]
     ax.set_xlim(20_000, 120_000)
@@ -95,6 +105,13 @@ for event in multipicks["event"].values:
     ax.xaxis.set_major_formatter(lambda x, _: f"{x/1000:g}")
     ax.set_ylabel("Time [s]")
     ax.set_ylim(15, -1)
+
+    ax = axs[1, 0]
+    ax.set_xlim(20_000, 120_000)
+    ax.xaxis.set_major_locator(MultipleLocator(20_000.0))
+    ax.xaxis.set_major_formatter(lambda x, _: f"{x/1000:g}")
+    ax.set_ylabel("Error [s]")
+    ax.set_ylim(-1.5, 1.5)
 
     ax = axs[0, -1]
     ax.plot([], [], color="black", lw=2, label="model")
@@ -104,7 +121,19 @@ for event in multipicks["event"].values:
     ax.plot([], [], color="C3", lw=4 / 3, label="picks")
     ax.legend(loc="lower right")
 
-    for ax, kind in zip(axs[1], res):
+    ax = axs[1, 1]
+    ax.plot([], [], color="C0", lw=2, label="Pp")
+    ax.legend(loc="lower right")
+
+    ax = axs[1, 2]
+    ax.plot([], [], color="C1", lw=2, label="Ps")
+    ax.legend(loc="lower right")
+
+    ax = axs[1, 3]
+    ax.plot([], [], color="C2", lw=2, label="Ss")
+    ax.legend(loc="lower right")
+
+    for ax, kind in zip(axs[2], res):
         img = (
             res[kind]
             .min("depth")
@@ -145,7 +174,7 @@ for event in multipicks["event"].values:
             ms=6,
         )
         ax.grid(which="both", color="w", linewidth=0.5, alpha=0.25)
-    ax = axs[1, 0]
+    ax = axs[2, 0]
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
     ax.xaxis.set_minor_locator(MultipleLocator(0.1))
     ax.yaxis.set_major_locator(MultipleLocator(0.5))
@@ -153,9 +182,9 @@ for event in multipicks["event"].values:
     ax.xaxis.set_major_formatter(lambda x, _: "")
     ax.yaxis.set_major_formatter(lambda x, _: f"{x}°")
     ax.set_ylabel("Latitude")
-    axs[1, -1].legend(loc="lower right")
+    axs[2, -1].legend(loc="lower right")
 
-    for ax, kind in zip(axs[2], res):
+    for ax, kind in zip(axs[3], res):
         img = (
             res[kind]
             .min("latitude")
@@ -199,35 +228,37 @@ for event in multipicks["event"].values:
         )
         ax.set_xlabel("Longitude")
         ax.grid(which="both", color="w", linewidth=0.5, alpha=0.25)
-    ax = axs[2, 0]
+    ax = axs[3, 0]
     ax.xaxis.set_major_locator(MultipleLocator(0.5))
     ax.xaxis.set_minor_locator(MultipleLocator(0.1))
     ax.yaxis.set_major_locator(MultipleLocator(10_000.0))
     ax.xaxis.set_major_formatter(lambda x, _: f"{x}°")
     ax.yaxis.set_major_formatter(lambda x, _: f"{x/1000:g}")
     ax.set_ylabel("Depth [km]")
-    axs[2, -1].legend(loc="lower right")
+    axs[3, -1].legend(loc="lower right")
 
-    for label, ax in zip("abcdefghijkl", axs.flat):
+    for label, ax in zip("abcdefghijklmnop", axs.flat):
         ax.add_artist(
             AnchoredText(
                 f"({label})",
                 loc="upper left",
                 frameon=False,
-                prop=dict(color="black" if label in "abcd" else "white", weight="bold"),
+                prop=dict(
+                    color="black" if label in "abcdefgh" else "white", weight="bold"
+                ),
                 pad=0.0,
                 borderpad=0.2,
             )
         )
 
-    axs[1, 0].set_xlim(-72.3, -71.1)
-    axs[1, 0].set_ylim(-32.9, -31.5)
     axs[2, 0].set_xlim(-72.3, -71.1)
-    axs[2, 0].set_ylim(65000, -5000)
+    axs[2, 0].set_ylim(-32.9, -31.5)
+    axs[3, 0].set_xlim(-72.3, -71.1)
+    axs[3, 0].set_ylim(65000, -5000)
 
     fig.colorbar(
         img,
-        ax=axs[2],
+        ax=axs[3],
         location="bottom",
         orientation="horizontal",
         label="Loss",
