@@ -1,0 +1,9 @@
+cmocean
+colorcet
+matplotlib
+numpy
+pandas
+pyproj
+tqdm
+xarray
+xdas
