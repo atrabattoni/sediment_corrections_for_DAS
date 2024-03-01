@@ -6,6 +6,8 @@ import xarray as xr
 from matplotlib.offsetbox import AnchoredText
 from matplotlib.ticker import MultipleLocator
 
+from config import ttlut_path
+
 # parameters
 sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
 
@@ -33,7 +35,7 @@ correction["hs"] = h * s
 fiber = xr.open_dataset("data/fiber.nc").sel(distance=slice(20_000, 120_000))
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc")
+ttlut = xr.open_dataarray(ttlut_path)
 
 
 for event in multipicks["event"].values:
@@ -62,9 +64,9 @@ for event in multipicks["event"].values:
 
     title = {
         "no": "No Correction",
-        "dt": "Delay Correction",
-        "corr": "Station Correction",
-        "hs": "Sediment Correction",
+        "dt": "Delay Corrections",
+        "corr": "Station Corrections",
+        "hs": "Sediment Corrections",
     }
 
     for ax_up, ax_down, kind in zip(axs[0], axs[1], correction):

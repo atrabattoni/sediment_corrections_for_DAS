@@ -1,6 +1,7 @@
 import pandas as pd
 import xarray as xr
 
+from config import ttlut_path
 from xloc.ttlut import get_grid, get_model, get_ttlut
 
 resolution = 1_000.0
@@ -39,4 +40,4 @@ ttlut = (
     .swap_dims({"distance": "station"})
     .transpose("station", "phase", "longitude", "latitude", "depth")
 )
-ttlut.to_netcdf("/ssd/trabatto/sediment_corrections/ttlut.nc")
+ttlut.to_netcdf(ttlut_path)

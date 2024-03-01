@@ -2,18 +2,14 @@ import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
-import xdas
 import xdas.signal as xp
 from matplotlib.offsetbox import AnchoredText
 
 starttime = "2021-11-10T01:16:50"
 t_before_in_sec = 2.0
 
-# signal selection & loading
-db = xdas.open_database("/data/optodas/post/database.nc")
-db = db.sel(time=slice(starttime, None))
-db = db.isel(time=slice(125 * 30))
-signal = db.to_xarray()
+# signal loading
+signal = xr.open_dataarray("data/signal.nc")
 
 # signal processing
 signal = xp.integrate(signal, dim="distance")

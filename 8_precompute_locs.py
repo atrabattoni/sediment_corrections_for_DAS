@@ -8,6 +8,8 @@ from tqdm import tqdm
 from utils import to_dataframe
 from xloc import localize
 
+from config import ttlut_path
+
 # parameters
 sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
 
@@ -28,7 +30,7 @@ correction["hs"] = h * s
 multipicks = xr.open_dataarray("data/picks.nc")
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc").load()
+ttlut = xr.open_dataarray(ttlut_path).load()
 
 multiloc = []
 multires = defaultdict(xr.Dataset)

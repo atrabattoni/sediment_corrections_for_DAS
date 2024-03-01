@@ -1,4 +1,6 @@
 #!/bin/bash
+wget https://zenodo.org/record/10732130/files/sediment_corrections_for_DAS.zip
+unzip sediment_corrections_for_DAS.zip
 
 # First, install dependencies (optional)
 echo "Installing dependencies..."

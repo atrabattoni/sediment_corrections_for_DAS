@@ -3,6 +3,7 @@
 import numpy as np
 import xarray as xr
 
+from config import ttlut_path
 from utils import correlation, multilocalize, multiresidual
 
 # parameters
@@ -13,7 +14,7 @@ sigma = xr.DataArray([0.1, 0.3, 0.3], coords={"phase": ["Pp", "Ps", "Ss"]})
 multipicks = xr.open_dataarray("data/picks.nc")
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc").load()
+ttlut = xr.open_dataarray(ttlut_path).load()
 
 # compute delay
 dt = (multipicks.sel(phase="Ps") - multipicks.sel(phase="Pp")).mean("event")

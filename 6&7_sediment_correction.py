@@ -7,6 +7,7 @@ import numpy as np
 import xarray as xr
 from tqdm import tqdm
 
+from config import ttlut_path
 from utils import get_h, get_s, multilocalize, multiresidual, solve_vpvs
 
 # parameters
@@ -24,7 +25,7 @@ fiber = xr.open_dataset("data/fiber.nc")
 multipicks = xr.open_dataarray("data/picks.nc")
 
 # load ttlut
-ttlut = xr.open_dataarray("/ssd/trabatto/sediment_corrections/ttlut.nc").load()
+ttlut = xr.open_dataarray(ttlut_path).load()
 
 # compute delay
 dt = (multipicks.sel(phase="Ps") - multipicks.sel(phase="Pp")).mean("event")
