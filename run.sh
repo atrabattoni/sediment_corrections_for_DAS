@@ -25,9 +25,9 @@ echo "Running 5_station_correction.py..."
 python 5_station_correction.py
 echo "Running 6&7_sediment_correction.py..."
 python '6&7_sediment_correction.py'
-echo "Running 8_localization.py..."
-python 8_localization.py
 echo "Running 8_precompute_locs.py..."
 python 8_precompute_locs.py
+echo "Running 8_localization.py..."
+python 8_localization.py
 echo "Running 9_catalog.py..."
 python 9_catalog.py
