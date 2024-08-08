@@ -1,4 +1,4 @@
-# Sediment Corrections for Distributed Acoustis Sensing
+# Sediment Corrections for Distributed Acoustic Sensing
 
 [![DOI](https://zenodo.org/badge/748286787.svg)](https://zenodo.org/doi/10.5281/zenodo.10678784)
 
